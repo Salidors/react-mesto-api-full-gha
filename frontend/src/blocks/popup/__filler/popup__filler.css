@@ -1,0 +1,9 @@
+.popup__filler {
+  margin-top: 50px;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__filler {
+    margin-top: 73px;
+  }
+}

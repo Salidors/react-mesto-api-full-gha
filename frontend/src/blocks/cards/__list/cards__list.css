@@ -1,0 +1,24 @@
+.cards__list {
+    justify-content: center;
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    grid-gap: 20px 17px;
+    max-width: fit-content;
+    margin: 0 auto;
+    padding: 0;
+    align-items: center;
+}
+
+@media screen and (max-width: 1023px) {
+    .cards__list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .cards__list {
+        flex-wrap: nowrap;
+        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+}

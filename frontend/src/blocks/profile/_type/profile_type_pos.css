@@ -1,0 +1,9 @@
+.profile_type_pos {
+    margin: 40px 0 51px;
+}
+
+@media screen and (max-width: 767px) {
+    .profile_type_pos {
+        margin: 0;
+    }
+}

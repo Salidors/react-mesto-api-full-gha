@@ -1,0 +1,19 @@
+.card__like {
+  margin: 0;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  border: none;
+  text-align: center;
+  justify-content: center;
+  background: no-repeat url(../../../image/Vector_like.svg);
+}
+
+.card__like:hover {
+  opacity: 0.5;
+}
+.card__like:active {
+  opacity: 1;
+  transition: color 0s;
+  background: no-repeat url(../../../image/Vector_like_black.svg);
+}
