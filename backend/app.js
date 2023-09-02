@@ -40,6 +40,12 @@ const cardsRouter = require('./routers/cards');
 
 app.use(apiPrefix, express.json());
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.post(`${apiPrefix}/signin`, celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required(),
