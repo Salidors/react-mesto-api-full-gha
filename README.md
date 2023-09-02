@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 130.193.52.205
+IP 130.193.52.205
 
 Frontend https://arcana.nomoredomainsicu.ru/
 

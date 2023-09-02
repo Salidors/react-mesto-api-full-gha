@@ -6,8 +6,8 @@ const NotFoundError = require('./errors/not-found-err');
 const { errorLogger, requestLogger } = require('./middlewares/logger');
 
 const allowedCors = [
-  'https://praktikum.tk',
-  'http://praktikum.tk',
+  'https://api.arcana.nomoredomainsicu.ru/',
+  'http://api.arcana.nomoredomainsicu.ru/',
   'localhost:3000',
 ];
 
