@@ -10,11 +10,14 @@ const allowedCors = [
   'http://praktikum.tk',
   'localhost:3000',
 ];
+
+const apiPrefix = '/api';
+
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const app = express();
-app.use(requestLogger);
-app.use((req, res, next) => {
+app.use(apiPrefix, requestLogger);
+app.use(apiPrefix, (req, res, next) => {
   const { method } = req;
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
@@ -28,7 +31,6 @@ app.use((req, res, next) => {
 
   return next();
 });
-
 const port = 3000;
 
 const { login, createUser } = require('./controllers/user');
@@ -36,9 +38,9 @@ const auth = require('./middlewares/auth');
 const usersRouter = require('./routers/users');
 const cardsRouter = require('./routers/cards');
 
-app.use(express.json());
+app.use(apiPrefix, express.json());
 
-app.post('/signin', celebrate({
+app.post(`${apiPrefix}/signin`, celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
@@ -46,7 +48,7 @@ app.post('/signin', celebrate({
 }), login);
 
 app.post(
-  '/signup',
+  `${apiPrefix}/signup`,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -65,19 +67,19 @@ app.post(
   createUser,
 );
 
-app.use(auth);
+app.use(apiPrefix, auth);
 
-app.use(usersRouter);
-app.use(cardsRouter);
+app.use(apiPrefix, usersRouter);
+app.use(apiPrefix, cardsRouter);
 
 app.use(errorLogger);
-app.use(errors());
+app.use(apiPrefix, errors());
 
-app.use((req, res, next) => {
+app.use(apiPrefix, (req, res, next) => {
   next(new NotFoundError('Тут ничего нет'));
 });
 
-app.use((err, req, res, next) => {
+app.use(apiPrefix, (err, req, res, next) => {
   res
     .status(err.statusCode || 500)
     .send({ message: err.message || 'Что-то случилось...' });
