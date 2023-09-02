@@ -5,12 +5,12 @@
   
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 
-Адрес репозитория: https://github.com/...
+Адрес репозитория: https://github.com/Salidors/react-mesto-api-full-gha
 
 ## Ссылки на проект
 
-IP-адрес x.x.x.x
+IP-адрес 130.193.52.205
 
-Frontend https://...
+Frontend https://arcana.nomoredomainsicu.ru/
 
-Backend https://...
+Backend https://api.arcana.nomoredomainsicu.ru/
