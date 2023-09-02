@@ -11,13 +11,11 @@ const allowedCors = [
   'localhost:3000',
 ];
 
-const apiPrefix = '/api';
-
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const app = express();
-app.use(apiPrefix, requestLogger);
-app.use(apiPrefix, (req, res, next) => {
+app.use(requestLogger);
+app.use((req, res, next) => {
   const { method } = req;
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
@@ -38,7 +36,7 @@ const auth = require('./middlewares/auth');
 const usersRouter = require('./routers/users');
 const cardsRouter = require('./routers/cards');
 
-app.use(apiPrefix, express.json());
+app.use(express.json());
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -46,7 +44,7 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post(`${apiPrefix}/signin`, celebrate({
+app.post('/signin', celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
@@ -54,7 +52,7 @@ app.post(`${apiPrefix}/signin`, celebrate({
 }), login);
 
 app.post(
-  `${apiPrefix}/signup`,
+  '/signup',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -73,19 +71,19 @@ app.post(
   createUser,
 );
 
-app.use(apiPrefix, auth);
+app.use(auth);
 
-app.use(apiPrefix, usersRouter);
-app.use(apiPrefix, cardsRouter);
+app.use(usersRouter);
+app.use(cardsRouter);
 
 app.use(errorLogger);
-app.use(apiPrefix, errors());
+app.use(errors());
 
-app.use(apiPrefix, (req, res, next) => {
+app.use((req, res, next) => {
   next(new NotFoundError('Тут ничего нет'));
 });
 
-app.use(apiPrefix, (err, req, res, next) => {
+app.use((err, req, res, next) => {
   res
     .status(err.statusCode || 500)
     .send({ message: err.message || 'Что-то случилось...' });
