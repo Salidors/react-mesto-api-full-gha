@@ -107,13 +107,16 @@ function App() {
   };
 
   const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((cardId) => cardId === currentUser._id);
     if (isLiked)
       api
         .deleteLike(card._id)
-        .then((newCard) => {
-          setCards((state) =>
-            state.map((c) => (c._id === card._id ? newCard : c))
+        .then(() => {
+          setCards((prevCards) =>
+            prevCards.map((c) => {
+              if (c._id === card._id) return {...c, likes: c.likes.filter(id => id !== currentUser._id)};
+              return c;
+            })
           );
         })
         .catch((error) => {
@@ -122,9 +125,12 @@ function App() {
     else
       api
         .addLike(card._id)
-        .then((newCard) => {
-          setCards((state) =>
-            state.map((c) => (c._id === card._id ? newCard : c))
+        .then(() => {
+          setCards((prevCards) =>
+          prevCards.map((c) => {
+            if (c._id === card._id) return {...c, likes: [...c.likes, currentUser._id]};
+            return c;
+          })
           );
         })
         .catch((error) => {
@@ -231,7 +237,7 @@ function App() {
       })
         .then((res) => {
           if (!res.ok) throw Error(res.statusText);
-          res.json();
+          return res.json();
         })
         .then(({ token }) => {
           validateToken(token);
