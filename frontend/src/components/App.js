@@ -29,7 +29,6 @@ const initApi = (token) =>
   }));
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
   const navigate = useNavigate();
   const [tooltipStatus, setTooltipStatus] = useState();
   const { pathname } = useLocation();
@@ -96,29 +95,16 @@ function App() {
     setSelectedCard(card);
   };
 
-  useEffect(() => {
-    if (isAuth)
-      api
-        .getProfile()
-        .then((userData) =>
-          setCurrentUser((state) => ({ ...state, ...userData }))
-        )
-        .catch((error) => {
-          console.error(error);
-        });
-  }, [isAuth]);
-
-  useEffect(() => {
-    if (isAuth)
-      api
-        .getInitialCards()
-        .then((cards) => {
-          setCards(cards);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  }, [isAuth]);
+  const loadCards = () => {
+    api
+      .getInitialCards()
+      .then((cards) => {
+        setCards(cards.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -183,8 +169,8 @@ function App() {
   const handleAddPlaceSubmit = (data) => {
     api
       .addCard(data)
-      .then((result) => {
-        setCards((state) => [result, ...state]);
+      .then(({ data }) => {
+        setCards((state) => [data, ...state]);
         closeAllPopups();
       })
       .catch((error) => {
@@ -194,7 +180,7 @@ function App() {
 
   const validateToken = useCallback(
     (token) => {
-      fetch(`${authApiUrl}/users/me`, {
+      fetch(`${apiUrl}/users/me`, {
         headers: {
           authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -205,11 +191,13 @@ function App() {
             setTooltipStatus("error");
             throw new Error(res.statusText);
           }
+          initApi(token);
+          setToken(token);
           return res.json();
         })
-        .then(({ data }) => {
+        .then(( data ) => {
           setCurrentUser((state) => ({ ...state, ...data }));
-          setIsAuth(true);
+          loadCards();
           navigate("/");
         })
         .catch((error) => {
@@ -234,27 +222,29 @@ function App() {
 
   const handleOnSignIn = useCallback(
     (email, password) => {
-      fetch(`${authApiUrl}/signin`, {
+      fetch(`${apiUrl}/signin`, {
         method: "post",
         headers: {
           "content-type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw Error(res.statusText);
+          res.json();
+        })
         .then(({ token }) => {
-          setIsAuth(true);
-          setToken(token);
+          validateToken(token);
           navigate("/");
         })
         .catch((error) => console.error(error));
     },
-    [navigate]
+    [navigate, validateToken]
   );
 
   const handleOnSignUp = useCallback(
     (email, password) => {
-      fetch(`${authApiUrl}/signup`, {
+      fetch(`${apiUrl}/signup`, {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -278,7 +268,7 @@ function App() {
   );
 
   return (
-    <CurrentUserContext.Provider value={{ currentUser, isAuth }}>
+    <CurrentUserContext.Provider value={{ currentUser, isAuth: Boolean(api) }}>
       <div>
         <Header email={currentUser.email} />
         {tooltipStatus && (
