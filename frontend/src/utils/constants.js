@@ -7,5 +7,4 @@ export const validationConfig = {
   errorClass: "popup__error_visible",
 };
 
-export const token = "25d3d6c6-1444-4ce7-81df-2f8f84159122";
-export const authApiUrl = "https://auth.nomoreparties.co";
+export const apiUrl = "https://api.arcana.nomoredomainsicu.ru";
