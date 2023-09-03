@@ -121,7 +121,7 @@ const patchUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const id = req.user._id;
 
-  UserModel.findById(id, { avatar }, { new: true, runValidators: true })
+  UserModel.findByIdAndUpdate(id, { avatar }, { new: true, runValidators: true })
     .orFail()
     .then((user) => res.send(user))
     .catch((e) => {
