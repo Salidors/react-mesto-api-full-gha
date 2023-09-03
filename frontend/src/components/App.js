@@ -8,14 +8,25 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import api from "../utils/Api";
+import Api from "../utils/Api";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { authApiUrl } from "../utils/constants";
+import { apiUrl } from "../utils/constants";
 import { clearToken, getToken, setToken } from "../utils/storage";
+
+let api;
+
+const initApi = (token) =>
+  (api = new Api({
+    baseUrl: apiUrl,
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  }));
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
