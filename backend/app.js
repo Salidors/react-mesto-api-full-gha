@@ -8,7 +8,7 @@ const { errorLogger, requestLogger } = require('./middlewares/logger');
 const allowedCors = [
   'https://api.arcana.nomoredomainsicu.ru/',
   'http://api.arcana.nomoredomainsicu.ru/',
-  'localhost:3000',
+  'http://localhost:3000',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
