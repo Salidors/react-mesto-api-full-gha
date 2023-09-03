@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const { celebrate, Segments, errors } = require('celebrate');
 const Joi = require('joi');
 const mongoose = require('mongoose');
@@ -6,8 +7,7 @@ const NotFoundError = require('./errors/not-found-err');
 const { errorLogger, requestLogger } = require('./middlewares/logger');
 
 const allowedCors = [
-  'https://api.arcana.nomoredomainsicu.ru/',
-  'http://api.arcana.nomoredomainsicu.ru/',
+  'https://api.arcana.nomoredomainsicu.ru',
   'http://localhost:3000',
 ];
 
@@ -15,11 +15,15 @@ const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const app = express();
 app.use(requestLogger);
+app.use(cors({
+  origin: allowedCors,
+  methods: DEFAULT_ALLOWED_METHODS,
+}));
 app.use((req, res, next) => {
   const { method } = req;
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    return res.end();
+    res.end();
   }
 
   const { origin } = req.headers;
@@ -27,7 +31,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', origin);
   }
 
-  return next();
+  next();
 });
 const port = 3000;
 
