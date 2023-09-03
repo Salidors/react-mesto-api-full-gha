@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from "react";
 
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState("nina.abramova@gmail.com");
+  const [email, setEmail] = useState("user3@gmail.com");
   const handleOnEmailChange = useCallback((event) => {
     setEmail(event.currentTarget.value);
   }, []);
 
-  const [password, setPassword] = useState("123");
+  const [password, setPassword] = useState("1");
   const handleOnPasswordChange = useCallback((event) => {
     setPassword(event.currentTarget.value);
   }, []);
