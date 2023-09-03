@@ -19,7 +19,6 @@ app.use(cors({
   origin: allowedCors,
   methods: DEFAULT_ALLOWED_METHODS,
 }));
-app.options('*', cors());
 app.use((req, res, next) => {
   const { method } = req;
   if (method === 'OPTIONS') {
