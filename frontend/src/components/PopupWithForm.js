@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function PopupWithForm({
   isOpen,
   onClose,
@@ -7,6 +9,8 @@ function PopupWithForm({
   children,
   onSubmit,
 }) {
+  const [isValid, setIsValid] = useState(false);
+
   return (
     <section
       onClick={(event) => {
@@ -19,13 +23,20 @@ function PopupWithForm({
         <button className="popup__close link" type="button" onClick={onClose} />
         <h2 className="popup__title">{title}</h2>
 
-        <form className="popup__filler" onSubmit={onSubmit} name={name}>
+        <form
+          className="popup__filler"
+          onSubmit={onSubmit}
+          name={name}
+          onChange={(event) => {
+            setIsValid(event.currentTarget.checkValidity());
+          }}
+        >
           {children}
           <button
-            className="popup__save
+            className={`popup__save
             popup__button
             link
-            popup__button_disabled"
+            ${isValid ? "" : "popup__button_disabled"}`}
             name="save"
             type="submit"
           >
