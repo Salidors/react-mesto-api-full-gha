@@ -5,7 +5,7 @@ import React, { useContext } from "react";
 function Card(props) {
   const { currentUser } = useContext(CurrentUserContext);
   const isOwn = props.card.owner === currentUser._id;
-  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+  const isLiked = props.card.likes.some((_id) => _id === currentUser._id);
   const cardLikeButtonClassName = `card__like link ${
     isLiked ? "card__like_black_heart" : ""
   }`;
